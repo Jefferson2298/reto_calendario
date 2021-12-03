@@ -40,12 +40,40 @@
                    });
                 }
             },
+            editable:true,
             eventResize:function(event,delta){
-                var inicio = $.fullCalendar.formatDate(start,'Y-MM-DD HH:mm:ss');
-                var fin =$.fullCalendar.formatDate(end,'Y-MM-DD HH:mm:ss');
+                var inicio = $.fullCalendar.formatDate(event.start,'Y-MM-DD HH:mm:ss');
+                var fin =$.fullCalendar.formatDate(event.end,'Y-MM-DD HH:mm:ss');
                 var title = event.title;
                 var id = event.id;
                 $.ajax({
+                    headers:{
+                            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                        },
+                    url:"calendario/action",
+                    type:"POST",
+                    data:{
+                        titulo:title,
+                        inicio:inicio,
+                        fin:fin,
+                        id:id,
+                        tipo:'update'
+                    },
+                    success:function(response){
+                        calendar.fullCalendar('refetchEvents');
+                        alert("Evento Actualizado");
+                    }
+                });
+            },
+            eventDrop:function(event,delta){
+                var inicio = $.fullCalendar.formatDate(event.start,'Y-MM-DD HH:mm:ss');
+                var fin =$.fullCalendar.formatDate(event.end,'Y-MM-DD HH:mm:ss');
+                var title = event.title;
+                var id = event.id;
+                $.ajax({
+                    headers:{
+                            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                        },
                     url:"calendario/action",
                     type:"POST",
                     data:{
@@ -61,6 +89,7 @@
                     }
                 });
             }
+
         });
     });
 </script>
