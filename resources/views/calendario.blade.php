@@ -39,6 +39,27 @@
                        }
                    });
                 }
+            },
+            eventResize:function(event,delta){
+                var inicio = $.fullCalendar.formatDate(start,'Y-MM-DD HH:mm:ss');
+                var fin =$.fullCalendar.formatDate(end,'Y-MM-DD HH:mm:ss');
+                var title = event.title;
+                var id = event.id;
+                $.ajax({
+                    url:"calendario/action",
+                    type:"POST",
+                    data:{
+                        titulo:title,
+                        inicio:inicio,
+                        fin:fin,
+                        id:id,
+                        tipo:'update'
+                    },
+                    success:function(response){
+                        calendar.fullCalendar('refetchEvents');
+                        alert("Evento Actualizado");
+                    }
+                });
             }
         });
     });
